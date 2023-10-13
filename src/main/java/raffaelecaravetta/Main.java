@@ -11,9 +11,7 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 // Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
 // then press Enter. You can now see whitespace characters in your code.
@@ -38,6 +36,8 @@ public class Main {
         Libro libro = null;
         Riviste rivista = null;
 
+        File file = new File("src/output.txt");
+
         for (int i = 0; i <= 10; i++) {
             libro = new Libro(random.nextLong(), "titolo" + i, year + i, 30 + (i / 2), "John", strings[random.nextInt(3)]);
             rivista = new Riviste(random.nextLong(), "titolo" + i, year + 10 - i, 10 + (i * 2), periodicitàs[random.nextInt(3)]);
@@ -60,7 +60,10 @@ public class Main {
 
         try {
             Archivio.forEach((s, elemento) -> System.out.println("Chiave : " + s + ", elemento : " + elemento.toString()));
-            salvaArchivioSuDisco(Archivio);
+            salvaArchivioSuDisco(Archivio,file);
+
+           leggiArchivioDaDisco(file);
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -129,8 +132,8 @@ public class Main {
         }
     }
 
-    private static void salvaArchivioSuDisco(Map<Long, Elemento> archivio) throws IOException {
-        File file = new File("src/output.txt");
+    private static void salvaArchivioSuDisco(Map<Long, Elemento> archivio,File file) throws IOException {
+
         FileUtils.write(file, ""
             + "#", StandardCharsets.UTF_8);
         archivio.forEach((K, V) -> {
@@ -144,5 +147,11 @@ public class Main {
             }
             }
         );
+    }
+
+
+    private static void leggiArchivioDaDisco(File file) throws IOException {
+        String contenuto = FileUtils.readFileToString(file, StandardCharsets.UTF_8);
+        System.out.println("Lettura archivio dal disco : " + contenuto);
     }
 }
